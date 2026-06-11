@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"WinDevReady/internal/config"
-	"WinDevReady/internal/store" // 导入安装记录模块
 )
 
 // UninstallTool 卸载单个工具
