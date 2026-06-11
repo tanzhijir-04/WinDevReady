@@ -1,12 +1,15 @@
 package ui
 
 import (
+	"net/url"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
 
 	"WinDevReady/internal/installer"
 	"WinDevReady/internal/logger"
@@ -54,7 +57,7 @@ func NewApp() *App {
 	a.mainWindow.SetFixedSize(false)
 
 	// 加载自定义图标
-	if iconRes, err := fyne.LoadResourceFromPath("assets/icon.png"); err == nil {
+	if iconRes, err := fyne.LoadResourceFromPath("assets/Icon.png"); err == nil {
 		a.mainWindow.SetIcon(iconRes)
 	}
 
@@ -154,28 +157,49 @@ func (a *App) buildSidebar() *fyne.Container {
 	return container.NewStack(sidebarBg, sidebarContent)
 }
 
-// buildFooter 构建底部栏（仓库地址 + 赞助）
+// buildFooter 构建底部栏（可点击仓库链接 + 赞助按钮）
 func (a *App) buildFooter() fyne.CanvasObject {
 	// 分隔线
 	sep := canvas.NewRectangle(PrimerColors.Border)
 	sep.SetMinSize(fyne.NewSize(0, 1))
 
-	// 仓库地址
-	repoText := canvas.NewText("📦 github.com/tanzhijir-04/WinDevReady", PrimerColors.TextMuted)
-	repoText.TextSize = 11
+	// 仓库地址 —— 可点击跳转浏览器
+	repoBtn := widget.NewButtonWithIcon(
+		"github.com/tanzhijir-04/WinDevReady",
+		theme.ComputerIcon(),
+		func() {
+			openURL("https://github.com/tanzhijir-04/WinDevReady")
+		},
+	)
+	repoBtn.Importance = widget.LowImportance
 
-	// 赞助链接
-	sponsorText := canvas.NewText("❤️ 爱发电赞助: ifdian.net/a/tanz666", PrimerColors.Warning)
-	sponsorText.TextSize = 11
+	// 赞助按钮 —— 爱发电
+	sponsorBtn := widget.NewButtonWithIcon(
+		"❤️ 爱发电赞助",
+		theme.FavoriteIcon(),
+		func() {
+			openURL("https://ifdian.net/a/tanz666")
+		},
+	)
+	sponsorBtn.Importance = widget.WarningImportance
 
-	// 右侧版权
-	copyText := canvas.NewText("© 2025 WinDevReady", PrimerColors.TextMuted)
-	copyText.TextSize = 11
+	// 版本号
+	verText := canvas.NewText("v1.0.0", PrimerColors.TextMuted)
+	verText.TextSize = 11
 
-	footerContent := container.NewHBox(repoText, layout.NewSpacer(), sponsorText, layout.NewSpacer(), copyText)
+	footerContent := container.NewHBox(repoBtn, layout.NewSpacer(), sponsorBtn, layout.NewSpacer(), verText)
 	footerPadded := container.NewPadded(footerContent)
 
 	return container.NewBorder(sep, nil, nil, nil, footerPadded)
+}
+
+// openURL 跨平台打开浏览器
+func openURL(rawURL string) {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return
+	}
+	fyne.CurrentApp().OpenURL(u)
 }
 
 // switchPage 切换页面
