@@ -1,94 +1,51 @@
-# WinDevReady
+<p align="center">
+  <img src="assets/Icon.png" width="120" alt="WinDevReady Icon">
+</p>
 
-> 帮朋友一键配好 Windows 上的 AI 开发环境。
+<h1 align="center">WinDevReady</h1>
 
-你有没有过这种经历：朋友说「我想学 AI 编程」，然后你花了两小时帮他装 Node.js、Git、Python、Claude Code……装完还各种报错。
+<p align="center">
+  <strong>Windows 一键 AI 开发环境配置工具</strong><br>
+  <sub>帮你的朋友快速配好 AI 开发环境，操作者是开发者本人，受益者是对方。</sub>
+</p>
 
-**WinDevReady 就是干这个的**——打开工具，勾选要装的东西，点一下，剩下的全自动。
-
-![Go](https://img.shields.io/badge/Go-1.23-00ADD8?logo=go&logoColor=white)
-![Platform](https://img.shields.io/badge/Windows-10%2F11-0078D4?logo=windows&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-brightgreen)
-
----
-
-## 截图
-
-> 运行 `WinDevReady.exe` 即可看到以下界面
-
-- 深色科技风 UI，自定义配色主题
-- 左侧导航栏，右侧内容区
-- 底部仓库链接和赞助按钮可点击跳转浏览器
+<p align="center">
+  <img src="https://img.shields.io/badge/Go-1.23-00ADD8?logo=go&logoColor=white" alt="Go">
+  <img src="https://img.shields.io/badge/Windows-10%2F11-0078D4?logo=windows&logoColor=white" alt="Windows">
+  <img src="https://img.shields.io/badge/License-MIT-brightgreen" alt="License">
+  <img src="https://img.shields.io/badge/Fyne-v2-5FAA5F?logo=github&logoColor=white" alt="Fyne">
+</p>
 
 ---
 
-## 它能干什么
+## 功能概览
 
-### 1. 自动搞定网络问题
+| 模块 | 说明 |
+|------|------|
+| **网络检测** | 自动检测 npm/GitHub 连通性，不通则切换国内镜像；检测代理并自动配置 |
+| **一键安装** | 勾选工具，点击安装，已装自动跳过，日志实时输出 |
+| **版本更新** | 对比最新版本，支持逐个或批量升级 |
+| **卸载清理** | 只清理本工具安装的记录，不触碰用户原有环境 |
+| **环境验证** | 逐项检测工具可用性，输出环境报告卡 |
 
-检测你的网络能不能访问 npm 和 GitHub。如果不通，自动切换到国内镜像（npmmirror、清华源）。如果开了代理，自动给 npm、git、pip 配好代理地址。
+## 可安装工具
 
-**你不需要手动配置任何东西。**
+| 分组 | 工具 |
+|------|------|
+| 基础运行时 | Node.js LTS · Git · Python 3 |
+| AI CLI 工具 | Claude Code · Codex CLI · Echobird |
+| 编辑器 | VS Code · Cursor |
+| 终端增强 | Windows Terminal · Oh My Posh |
 
-### 2. 一键安装开发工具
+> 社区贡献新工具只需在 `internal/config/tools.go` 添加一条记录。
 
-打开工具，你会看到四个分组，勾选要装的，点「一键安装」：
+## 快速开始
 
-| 分组 | 有哪些工具 | 怎么装 |
-|------|-----------|--------|
-| **基础运行时** | Node.js、Git、Python 3 | winget / 直接下载 |
-| **AI CLI 工具** | Claude Code、Codex CLI、Echobird | npm 全局安装 |
-| **编辑器** | VS Code、Cursor | winget |
-| **终端增强** | Windows Terminal、Oh My Posh | winget |
+### 下载
 
-- 每个工具装之前会先检测有没有装过，装过的自动跳过
-- Git 支持从 GitHub 镜像直接下载安装包静默安装（不用手动点下一步）
-- 安装过程实时显示日志
+从 [GitHub Actions](https://github.com/tanzhijir-04/WinDevReady/actions) 下载最新编译产物，解压后双击运行。
 
-### 3. 一键升级
-
-工具装完之后，能检测每个工具的最新版本，支持逐个升级或全部升级。
-
-### 4. 卸载清理
-
-只卸载本工具帮你装的东西，不会碰你自己原来装的软件。卸载后自动更新记录。
-
-### 5. 环境验证
-
-装完之后点「环境验证」，会逐个检测所有工具能不能正常调用，输出一张报告卡：
-
-```
-╔══════════════════════════════════════════════╗
-║           环 境 验 证 报 告 卡              ║
-╠══════════════════════════════════════════════╣
-【基础运行时】
-  ✅  Node.js LTS          v22.15.0
-  ✅  Git                  v2.49.0
-  ✅  Python 3             v3.12.3
-【AI CLI 工具】
-  ✅  Claude Code          v1.0.30
-  ❌  Codex CLI            未安装
-【编辑器】
-  ✅  VS Code              1.99.2
-  ✅  Cursor               0.49.6
-╠══════════════════════════════════════════════╣
-  环境检测完成：7/8 项通过
-╚══════════════════════════════════════════════╝
-```
-
----
-
-## 怎么用
-
-### 方式一：下载 exe（推荐）
-
-1. 去 [GitHub Actions](https://github.com/tanzhijir-04/WinDevReady/actions) 页面
-2. 点最新的构建记录 → 底部 Artifacts 区域下载 `WinDevReady-windows-amd64.zip`
-3. 解压，双击 `WinDevReady.exe` 运行
-
-### 方式二：自己编译
-
-需要先装好 [Go](https://go.dev/dl/)（1.23+）和 Git：
+### 编译
 
 ```bash
 git clone https://github.com/tanzhijir-04/WinDevReady.git
@@ -97,84 +54,50 @@ go mod tidy
 go build -o WinDevReady.exe -ldflags="-s -w" .
 ```
 
-编译好的 `WinDevReady.exe` 就在当前目录。
+## 添加新工具
 
----
-
-## 怎么添加新工具
-
-只需要在 `internal/config/tools.go` 文件里加一条记录，比如加一个 `npm` 方式的工具：
+在 `internal/config/tools.go` 中添加：
 
 ```go
 {
     ID:          "my-tool",
-    Name:        "我的工具",
-    Group:       GroupAICLI,        // 选分组
-    Method:      MethodNpm,         // 选安装方式
-    Package:     "my-tool-pkg",     // 包名
-    VerifyCmd:   "my-tool -v",      // 验证命令
-    Description: "一句话说明",
+    Name:        "My Tool",
+    Group:       GroupAICLI,
+    Method:      MethodNpm,
+    Package:     "my-tool-pkg",
+    VerifyCmd:   "my-tool --version",
+    Description: "工具说明",
 },
 ```
 
-支持的安装方式：
-
-| 方式 | 说明 | 需要填写的字段 |
-|------|------|---------------|
-| `winget` | Windows 包管理器 | `WingetID` |
-| `npm` | npm 全局安装 | `Package` |
-| `pip` | pip 安装 | `Package` |
-| `download` | 直接下载安装包 | `DownloadURLs` + `SilentArgs` |
-| `choco` | Chocolatey | `Package` |
-
----
+支持的安装方式：`winget` · `npm` · `pip` · `download` · `choco`
 
 ## 项目结构
 
 ```
 WinDevReady/
-├── main.go                      # 程序入口
-├── assets/
-│   ├── Icon.png                 # 应用图标
-│   └── WinDevReady_Icon.svg     # 图标源文件
+├── main.go                    # 入口
+├── assets/                    # 图标资源
 ├── internal/
-│   ├── config/tools.go          # 所有工具的配置（加新工具改这里）
-│   ├── logger/logger.go         # 日志系统
-│   ├── store/records.go         # 安装记录（存在 AppData 里）
-│   ├── network/detector.go      # 网络检测 + 镜像/代理自动切换
-│   ├── installer/
-│   │   ├── installer.go         # 安装引擎
-│   │   ├── downloader.go        # HTTP 下载器（多源回退）
-│   │   ├── uninstaller.go       # 卸载清理
-│   │   └── updater.go           # 版本对比和升级
-│   ├── verify/verifier.go       # 环境验证报告卡
-│   └── ui/
-│       ├── app.go               # 主窗口 + 底部栏（仓库/赞助链接）
-│       ├── theme.go             # 自定义深色主题
-│       ├── widgets.go           # 通用 UI 组件
-│       ├── install_page.go      # 安装页面
-│       ├── update_page.go       # 更新页面
-│       ├── uninstall_page.go    # 卸载页面
-│       └── report_page.go       # 报告卡页面
-├── cmd/genicon/                 # 图标生成工具
-└── .github/workflows/build.yml  # GitHub Actions 自动编译
+│   ├── config/tools.go        # 工具配置（数据驱动）
+│   ├── installer/             # 安装/卸载/升级引擎
+│   ├── network/detector.go    # 网络检测
+│   ├── logger/logger.go       # 流式日志
+│   ├── store/records.go       # 安装记录
+│   ├── verify/verifier.go     # 环境验证
+│   └── ui/                    # 界面
+│       ├── app.go             # 主窗口
+│       ├── theme.go           # 自定义深色主题
+│       └── ..._page.go        # 各功能页面
+└── .github/workflows/         # CI 自动编译
 ```
 
----
-
-## 技术细节
+## 技术栈
 
 - **语言**：Go 1.23
-- **GUI**：[Fyne v2](https://fyne.io/) — 跨平台原生 UI
-- **主题**：自定义深色科技风配色（`PrimerTheme`）
-- **编译产物**：单个 `.exe` 文件，不依赖运行时
-- **CI/CD**：GitHub Actions（Windows runner 自动编译）
-
----
-
-## 贡献
-
-欢迎提 Issue 和 PR。最简单的贡献方式就是**加一个新工具**——照着上面的格式在 `config/tools.go` 里加一条就行。
+- **GUI**：[Fyne v2](https://fyne.io/) · 自定义深色主题
+- **产物**：单文件 `.exe`，无运行时依赖
+- **CI**：GitHub Actions · Windows Runner
 
 ## 赞助
 
