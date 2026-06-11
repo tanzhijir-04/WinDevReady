@@ -2,7 +2,7 @@
 
 > 帮朋友一键配好 Windows 上的 AI 开发环境。
 
-你有没有过这种经历：朋友说「我想学 AI 编程」，然后你花了两小时帮他装 Node.js、Git、Python、Claude Code……装完还各种报错。
+你有没有过这种经历：朋友说「我想试试更高级的 AI 工具」，然后你花了两小时帮他装 Node.js、Git、Python、Claude Code……装完还各种报错。
 
 **WinDevReady 就是干这个的**——打开工具，勾选要装的东西，点一下，剩下的全自动。
 
