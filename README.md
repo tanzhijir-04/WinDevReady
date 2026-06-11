@@ -2,13 +2,23 @@
 
 > 帮朋友一键配好 Windows 上的 AI 开发环境。
 
-你有没有过这种经历：朋友说「我想试试更高级的 AI 工具」，然后你花了两小时帮他装 Node.js、Git、Python、Claude Code……装完还各种报错。
+你有没有过这种经历：朋友说「我想学 AI 编程」，然后你花了两小时帮他装 Node.js、Git、Python、Claude Code……装完还各种报错。
 
 **WinDevReady 就是干这个的**——打开工具，勾选要装的东西，点一下，剩下的全自动。
 
 ![Go](https://img.shields.io/badge/Go-1.23-00ADD8?logo=go&logoColor=white)
 ![Platform](https://img.shields.io/badge/Windows-10%2F11-0078D4?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-brightgreen)
+
+---
+
+## 截图
+
+> 运行 `WinDevReady.exe` 即可看到以下界面
+
+- 深色科技风 UI，自定义配色主题
+- 左侧导航栏，右侧内容区
+- 底部仓库链接和赞助按钮可点击跳转浏览器
 
 ---
 
@@ -99,11 +109,11 @@ go build -o WinDevReady.exe -ldflags="-s -w" .
 {
     ID:          "my-tool",
     Name:        "我的工具",
-    Group:       GroupAICLI,        // 选分组：GroupRuntime / GroupAICLI / GroupEditor / GroupTerminal
+    Group:       GroupAICLI,        // 选分组
     Method:      MethodNpm,         // 选安装方式
     Package:     "my-tool-pkg",     // 包名
-    VerifyCmd:   "my-tool -v",      // 验证命令（用来判断装没装成功）
-    Description: "一句话说明这个工具是干嘛的",
+    VerifyCmd:   "my-tool -v",      // 验证命令
+    Description: "一句话说明",
 },
 ```
 
@@ -123,24 +133,30 @@ go build -o WinDevReady.exe -ldflags="-s -w" .
 
 ```
 WinDevReady/
-├── main.go                      # 程序入口，启动 GUI
+├── main.go                      # 程序入口
+├── assets/
+│   ├── Icon.png                 # 应用图标
+│   └── WinDevReady_Icon.svg     # 图标源文件
 ├── internal/
-│   ├── config/tools.go          # 所有工具的配置（加新工具改这里就行）
-│   ├── logger/logger.go         # 日志系统（实时输出到界面）
+│   ├── config/tools.go          # 所有工具的配置（加新工具改这里）
+│   ├── logger/logger.go         # 日志系统
 │   ├── store/records.go         # 安装记录（存在 AppData 里）
 │   ├── network/detector.go      # 网络检测 + 镜像/代理自动切换
 │   ├── installer/
-│   │   ├── installer.go         # 安装引擎（核心）
+│   │   ├── installer.go         # 安装引擎
 │   │   ├── downloader.go        # HTTP 下载器（多源回退）
 │   │   ├── uninstaller.go       # 卸载清理
 │   │   └── updater.go           # 版本对比和升级
 │   ├── verify/verifier.go       # 环境验证报告卡
-│   └── ui/                      # 界面
-│       ├── app.go               # 主窗口和侧边栏
+│   └── ui/
+│       ├── app.go               # 主窗口 + 底部栏（仓库/赞助链接）
+│       ├── theme.go             # 自定义深色主题
+│       ├── widgets.go           # 通用 UI 组件
 │       ├── install_page.go      # 安装页面
 │       ├── update_page.go       # 更新页面
 │       ├── uninstall_page.go    # 卸载页面
 │       └── report_page.go       # 报告卡页面
+├── cmd/genicon/                 # 图标生成工具
 └── .github/workflows/build.yml  # GitHub Actions 自动编译
 ```
 
@@ -149,15 +165,22 @@ WinDevReady/
 ## 技术细节
 
 - **语言**：Go 1.23
-- **GUI**：[Fyne v2](https://fyne.io/) — 用 Go 写的跨平台 UI 框架
-- **编译产物**：单个 `.exe` 文件，不依赖任何运行时，拷到对方电脑就能跑
-- **CI/CD**：推代码到 GitHub 后自动用 Windows runner 编译
+- **GUI**：[Fyne v2](https://fyne.io/) — 跨平台原生 UI
+- **主题**：自定义深色科技风配色（`PrimerTheme`）
+- **编译产物**：单个 `.exe` 文件，不依赖运行时
+- **CI/CD**：GitHub Actions（Windows runner 自动编译）
 
 ---
 
 ## 贡献
 
 欢迎提 Issue 和 PR。最简单的贡献方式就是**加一个新工具**——照着上面的格式在 `config/tools.go` 里加一条就行。
+
+## 赞助
+
+如果这个工具帮到了你，欢迎请我喝杯咖啡 ☕
+
+👉 [爱发电赞助](https://ifdian.net/a/tanz666)
 
 ## License
 
