@@ -88,12 +88,12 @@ func (p *InstallPage) buildActionBar() fyne.CanvasObject {
 	selectAllBtn := widget.NewButton("全选", func() {
 		for _, cb := range p.checkboxes {
 			cb.SetChecked(true)
-		})
+		}
 	})
 	deselectAllBtn := widget.NewButton("全不选", func() {
 		for _, cb := range p.checkboxes {
 			cb.SetChecked(false)
-		})
+		}
 	})
 
 	// 一键安装
