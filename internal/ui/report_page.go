@@ -16,7 +16,7 @@ type ReportPage struct {
 	content   fyne.CanvasObject
 	verifier  *verify.Verifier
 	log       *logger.Logger
-	logEntry  *widget.TextEntry
+	logEntry  *widget.Entry
 	reportLabel *widget.Label
 }
 

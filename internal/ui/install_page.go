@@ -20,7 +20,7 @@ type InstallPage struct {
 	log       *logger.Logger
 	net       *network.Detector
 	checkboxes map[string]*widget.Check // toolID -> checkbox
-	logEntry   *widget.TextEntry
+	logEntry   *widget.Entry
 }
 
 // NewInstallPage 创建安装页面

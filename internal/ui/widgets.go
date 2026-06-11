@@ -7,7 +7,6 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
-	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -16,7 +15,6 @@ func createSidebarButton(label string, icon fyne.Resource, onTap func()) *fyne.C
 	btn := widget.NewButtonWithIcon(label, icon, onTap)
 	btn.Importance = widget.LowImportance
 	btn.Alignment = widget.ButtonAlignLeading
-	btn.IconPlacement = widget.ButtonIconOnly
 
 	return container.NewPadded(btn)
 }
@@ -30,7 +28,7 @@ func newTitle(text string) fyne.CanvasObject {
 }
 
 // newLogArea 创建日志输出区域
-func newLogArea() *widget.TextEntry {
+func newLogArea() *widget.Entry {
 	entry := widget.NewMultiLineEntry()
 	entry.Wrapping = fyne.TextWrapBreak
 	entry.Disable()
@@ -44,9 +42,9 @@ func newGroupCard(title string, content fyne.CanvasObject) *widget.Card {
 
 // newCheckboxList 创建可勾选的工具列表
 type ToolCheckbox struct {
-	ID        string
-	Name      string
-	CheckBox  *widget.Check
+	ID       string
+	Name     string
+	CheckBox *widget.Check
 }
 
 // createToolCheckboxList 为指定分组创建勾选列表

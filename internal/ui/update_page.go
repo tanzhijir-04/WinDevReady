@@ -20,7 +20,7 @@ type UpdatePage struct {
 	inst     *installer.Installer
 	log      *logger.Logger
 	store    *store.Records
-	logEntry *widget.TextEntry
+	logEntry *widget.Entry
 	list     *widget.List
 	updates  []installer.UpdateInfo
 }
