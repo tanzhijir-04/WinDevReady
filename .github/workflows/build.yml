@@ -1,0 +1,36 @@
+name: Build WinDevReady
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # 手动触发
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Verify dependencies
+        run: go mod verify
+
+      - name: Build
+        run: go build -o WinDevReady.exe -ldflags="-s -w" .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WinDevReady-windows-amd64
+          path: WinDevReady.exe
+          if-no-files-found: error
