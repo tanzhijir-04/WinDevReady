@@ -3,6 +3,7 @@ package ui
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
@@ -13,6 +14,10 @@ import (
 	"WinDevReady/internal/store"
 	"WinDevReady/internal/verify"
 )
+
+// ============================================================
+// 应用主窗口 —— 自定义主题 + 侧边栏 + 底部栏
+// ============================================================
 
 // App 应用主结构
 type App struct {
@@ -32,8 +37,6 @@ type App struct {
 	uninstallPage *UninstallPage
 	reportPage    *ReportPage
 
-	// 侧边栏按钮
-	sidebarBtns []*fyne.Container
 	currentPage string
 }
 
@@ -41,10 +44,19 @@ type App struct {
 func NewApp() *App {
 	a := &App{}
 
-	// 初始化 Fyne 应用
-	a.fyneApp = app.New()
-	a.mainWindow = a.fyneApp.NewWindow("WinDevReady - Windows AI 开发环境配置工具")
-	a.mainWindow.Resize(fyne.NewSize(960, 640))
+	// 初始化 Fyne 应用 + 自定义主题
+	a.fyneApp = app.NewWithID("com.windevready.app")
+	a.fyneApp.Settings().SetTheme(NewPrimerTheme())
+
+	// 创建主窗口
+	a.mainWindow = a.fyneApp.NewWindow("WinDevReady")
+	a.mainWindow.Resize(fyne.NewSize(1024, 680))
+	a.mainWindow.SetFixedSize(false)
+
+	// 加载自定义图标
+	if iconRes, err := fyne.LoadResourceFromPath("assets/icon.png"); err == nil {
+		a.mainWindow.SetIcon(iconRes)
+	}
 
 	// 初始化核心模块
 	a.log = logger.New()
@@ -63,62 +75,107 @@ func (a *App) Run() {
 	a.mainWindow.ShowAndRun()
 }
 
-// buildLayout 构建主界面布局
+// buildLayout 构建主界面布局：侧边栏 | 主内容 + 底部栏
 func (a *App) buildLayout() fyne.CanvasObject {
 	// 侧边栏
 	sidebar := a.buildSidebar()
 
-	// 主内容区（默认显示安装页）
+	// 主内容区
 	mainContent := container.NewStack()
 
-	// 页面容器
-	pages := container.NewBorder(nil, nil, sidebar, nil, mainContent)
-
-	// 设置默认页面
+	// 初始化页面
 	a.installPage = NewInstallPage(a.inst, a.log, a.network, mainContent)
 	a.updatePage = NewUpdatePage(a.inst, a.log, a.store, mainContent)
 	a.uninstallPage = NewUninstallPage(a.inst, a.log, a.store, mainContent)
 	a.reportPage = NewReportPage(a.verify, a.log, mainContent)
 
+	// 底部栏
+	footer := a.buildFooter()
+
+	// 右侧 = 主内容 + 底部栏
+	rightSide := container.NewBorder(nil, footer, nil, nil, mainContent)
+
+	// 整体布局：侧边栏 + 右侧
+	root := container.NewBorder(nil, nil, sidebar, nil, rightSide)
+
 	// 默认显示安装页
 	a.installPage.Show()
 
-	return pages
+	return root
 }
 
-// buildSidebar 构建侧边栏导航
+// buildSidebar 构建侧边栏
 func (a *App) buildSidebar() *fyne.Container {
-	// 页面按钮定义
+	// 侧边栏按钮
 	btnDefs := []struct {
 		id    string
 		label string
 		icon  fyne.Resource
 	}{
-		{"install", "安装工具", theme.DownloadIcon()},
-		{"update", "版本更新", theme.ViewRefreshIcon()},
-		{"uninstall", "卸载清理", theme.DeleteIcon()},
-		{"report", "环境报告", theme.ConfirmIcon()},
+		{"install", "安装", theme.DownloadIcon()},
+		{"update", "更新", theme.ViewRefreshIcon()},
+		{"uninstall", "卸载", theme.DeleteIcon()},
+		{"report", "报告", theme.ConfirmIcon()},
 	}
 
-	var buttons []*fyne.Container
+	// Logo 区域
+	logo := canvas.NewText("⚡ WinDevReady", PrimerColors.Primary)
+	logo.TextSize = 18
+	logo.TextStyle = fyne.TextStyle{Bold: true}
+	logoBox := container.NewPadded(logo)
+
+	// 版本标签
+	version := canvas.NewText("v1.0.0", PrimerColors.TextMuted)
+	version.TextSize = 11
+	versionBox := container.NewPadded(version)
+
+	// 分隔线
+	sep := canvas.NewRectangle(PrimerColors.Border)
+	sep.SetMinSize(fyne.NewSize(0, 1))
+
+	var items []fyne.CanvasObject
+	items = append(items, logoBox, sep, versionBox)
+
 	for _, def := range btnDefs {
-		def := def // 捕获循环变量
-		btn := createSidebarButton(def.label, def.icon, func() {
+		def := def
+		btn := widgetNewSidebarBtn(def.label, def.icon, func() {
 			a.switchPage(def.id)
 		})
-		buttons = append(buttons, btn)
+		items = append(items, btn)
 	}
 
-	// Logo + 标题
-	title := newTitle("WinDevReady")
+	// 底部填充
+	items = append(items, layout.NewSpacer())
 
-	sidebarItems := []fyne.CanvasObject{title}
-	for _, btn := range buttons {
-		sidebarItems = append(sidebarItems, btn)
-		sidebarItems = append(sidebarItems, layout.NewSpacer())
-	}
+	// 侧边栏背景
+ sidebarBg := canvas.NewRectangle(PrimerColors.Sidebar)
+ sidebarContent := container.NewVBox(items...)
 
-	return container.NewVBox(sidebarItems...)
+	return container.NewStack(sidebarBg, sidebarContent)
+}
+
+// buildFooter 构建底部栏（仓库地址 + 赞助）
+func (a *App) buildFooter() fyne.CanvasObject {
+	// 分隔线
+	sep := canvas.NewRectangle(PrimerColors.Border)
+	sep.SetMinSize(fyne.NewSize(0, 1))
+
+	// 仓库地址
+	repoText := canvas.NewText("📦 github.com/tanzhijir-04/WinDevReady", PrimerColors.TextMuted)
+	repoText.TextSize = 11
+
+	// 赞助链接
+	sponsorText := canvas.NewText("❤️ 爱发电赞助: ifdian.net/a/tanz666", PrimerColors.Warning)
+	sponsorText.TextSize = 11
+
+	// 右侧版权
+	copyText := canvas.NewText("© 2025 WinDevReady", PrimerColors.TextMuted)
+	copyText.TextSize = 11
+
+	footerContent := container.NewHBox(repoText, layout.NewSpacer(), sponsorText, layout.NewSpacer(), copyText)
+	footerPadded := container.NewPadded(footerContent)
+
+	return container.NewBorder(sep, nil, nil, nil, footerPadded)
 }
 
 // switchPage 切换页面

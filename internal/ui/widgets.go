@@ -10,13 +10,17 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-// createSidebarButton 创建侧边栏按钮
-func createSidebarButton(label string, icon fyne.Resource, onTap func()) *fyne.Container {
+// widgetNewSidebarBtn 创建侧边栏按钮（深色风格）
+func widgetNewSidebarBtn(label string, icon fyne.Resource, onTap func()) fyne.CanvasObject {
 	btn := widget.NewButtonWithIcon(label, icon, onTap)
 	btn.Importance = widget.LowImportance
 	btn.Alignment = widget.ButtonAlignLeading
 
-	return container.NewPadded(btn)
+	// 按钮背景
+	bg := canvas.NewRectangle(PrimerColors.Sidebar)
+	bg.SetMinSize(fyne.NewSize(180, 40))
+
+	return container.NewStack(bg, container.NewPadded(btn))
 }
 
 // newTitle 创建应用标题组件
