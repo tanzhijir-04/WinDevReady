@@ -20,8 +20,8 @@ type PrimerTheme struct {
 // NewPrimerTheme 创建自定义主题，fontDir 为字体目录路径
 func NewPrimerTheme() *PrimerTheme {
 	return &PrimerTheme{
-		normalFont: theme.DefaultTheme().Font(theme.TextStyleRegular),
-		monoFont:   theme.DefaultTheme().Font(theme.TextStyleMonospace),
+		normalFont: theme.DefaultTheme().Font(fyne.TextStyle{}),
+		monoFont:   theme.DefaultTheme().Font(fyne.TextStyle{Monospace: true}),
 	}
 }
 
@@ -60,8 +60,6 @@ func (t *PrimerTheme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant)
 		return color.NRGBA{R: 255, G: 180, B: 50, A: 255} // 警告橙
 	case theme.ColorNameError:
 		return color.NRGBA{R: 255, G: 80, B: 80, A: 255}  // 错误红
-	case theme.ColorNameCard:
-		return color.NRGBA{R: 30, G: 34, B: 46, A: 255} // 卡片背景
 	case theme.ColorNameOverlayBackground:
 		return color.NRGBA{R: 20, G: 24, B: 34, A: 255}
 	case theme.ColorNameHeaderBackground:
