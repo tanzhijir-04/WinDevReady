@@ -176,7 +176,7 @@ func (a *App) buildFooter() fyne.CanvasObject {
 	// 赞助按钮 —— 爱发电
 	sponsorBtn := widget.NewButtonWithIcon(
 		"❤️ 爱发电赞助",
-		theme.FavoriteIcon(),
+		theme.ContentAddIcon(),
 		func() {
 			openURL("https://ifdian.net/a/tanz666")
 		},
